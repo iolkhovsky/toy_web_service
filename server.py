@@ -1,11 +1,10 @@
-from fastapi import FastAPI, Request
-from fastapi.encoders import jsonable_encoder
+from fastapi import FastAPI, File, UploadFile, Request
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 import uvicorn
 
 from backend.face_detector import FaceDetector
-from utils import ProcessingItem, base64str_to_img
+from utils import ProcessingItem, decode_image
 
 processor = FaceDetector()
 app = FastAPI()
@@ -17,13 +16,20 @@ async def root(request: Request):
     return FileResponse("static/ui.html")
 
 
-@app.put("/image")
-async def process_image(imgdata: ProcessingItem):
-    img = base64str_to_img(imgdata.EncodedImg)
+@app.post("/image")
+async def process_image(file: UploadFile = File(...)):
+    content = await file.read()
+    img = decode_image(content)
     img, data = processor(img)
+
+    def preprocess_box(box):
+        return [int(x) for x in box]
+
+    data = [preprocess_box(x) for x in list(data)]
     return JSONResponse({
-        "id": imgdata.RequestId,
-        "encodedImgSize": len(imgdata.EncodedImg)
+        "id": file.filename,
+        "file_size": len(content),
+        "detections": data
     })
 
 
