@@ -1,18 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Face detection service</title>
     <link rel="stylesheet" type="text/css" href="static/styles.css">
 </head>
 <body>
-    <form action="/image" enctype="multipart/form-data" method="post">
-        <div>
-            <label for="file">Choose file to upload</label>
-            <input name="file" type="file" accept=".jpg, .jpeg, .png" id="file">
-            <input type="submit">
-        </div>
-    </form>
-   <script src="static/upload.js"></script>
+    <div>
+        <label for="uploaded-file">Choose file to upload</label>
+        <input name="file" type="file" accept=".jpg, .jpeg, .png" id="uploaded-file">
+    </div>
+    <canvas id= "image-canvas" class="image-container"> </canvas>
+    <div id="output">Processing results</div>
+    <script src="static/app.js"></script>
 </body>
 </html>

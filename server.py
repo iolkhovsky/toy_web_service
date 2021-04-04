@@ -1,14 +1,34 @@
 from fastapi import FastAPI, File, UploadFile, Request
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 from backend.face_detector import FaceDetector
-from utils import ProcessingItem, decode_image
+from utils import decode_image
 
 processor = FaceDetector()
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+origins = [
+    "http://localhost",
+    "http://localhost:8000",
+    "https://localhost",
+    "https://localhost:80000",
+    "http://0.0.0.0",
+    "http://0.0.0.0:8000",
+    "https://0.0.0.0",
+    "https://0.0.0.0:8000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/", response_class=HTMLResponse)
