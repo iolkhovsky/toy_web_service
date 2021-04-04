@@ -1,4 +1,28 @@
 var boxes;
+var canvas = document.getElementById("image-canvas");
+var output_console = document.getElementById("output")
+var det_table = document.getElementById("detections_table")
+
+function show_detection_table(boxes) {
+    var table_description = "";
+
+    table_description = "<br>Detections</br>";
+    table_description += "<table>";
+    table_description += "<tr>" + "<th>#</th>" + "<th>X</th>" + "<th>Y</th>" +
+        "<th>Width</th>" + "<th>Height</th>" + "</tr>";
+    for (var i = 0; i < boxes.length; i++) {
+        table_description += "<tr>";
+        table_description +=
+            "<td>" + i + "</td>" +
+            "<td>" + JSON.stringify(boxes[i][0]) + "</td>" +
+            "<td>" + JSON.stringify(boxes[i][1]) + "</td>" +
+            "<td>" + JSON.stringify(boxes[i][2]) + "</td>" +
+            "<td>" + JSON.stringify(boxes[i][3]) + "</td>";
+        table_description += "</tr>";
+    }
+    table_description += "</table>";
+    det_table.innerHTML = table_description;
+}
 
 function draw_box(context, box) {
   x1 = box[0]
@@ -17,7 +41,6 @@ function draw_box(context, box) {
 }
 
 function draw_source_image() {
-  var canvas = document.getElementById("image-canvas");
   canvas.width = this.width;
   canvas.height = this.height;
   var ctx = canvas.getContext('2d');
@@ -25,7 +48,6 @@ function draw_source_image() {
 }
 
 function draw_detections(boxes) {
-  var canvas = document.getElementById("image-canvas");
   var ctx = canvas.getContext('2d');
   var arrayLength = boxes.length;
   for (var i = 0; i < arrayLength; i++) {
@@ -52,11 +74,12 @@ function uploadedEventHandler(e) {
   request.open("POST", url, true);
   request.onload = function () {
     boxes = request.response["detections"];
-    document.getElementById("output").textContent = JSON.stringify(boxes);
+    output_console.textContent = JSON.stringify(boxes);
     draw_detections(boxes)
+    show_detection_table(boxes)
   };
   request.send(formData);
-  document.getElementById("output").textContent = "Waiting for server's response...";
+  output_console.textContent = "Waiting for server's response...";
 }
 
 document.getElementById("uploaded-file").onchange = uploadedEventHandler;
