@@ -68,7 +68,7 @@ function uploadedEventHandler(e) {
   var formData = new FormData();
   formData.append("file", this.files[0]);
 
-  var url = "http://localhost:8000/image";
+  var url = "/image";
   var request = new XMLHttpRequest();
   request.responseType = "json";
   request.open("POST", url, true);
