@@ -11,7 +11,7 @@ function show_detection_table(boxes) {
     table_description += "<tr>" + "<th>#</th>" + "<th>X</th>" + "<th>Y</th>" +
         "<th>Width</th>" + "<th>Height</th>" + "</tr>";
     for (var i = 0; i < boxes.length; i++) {
-        table_description += "<tr>";
+        table_description += "<tr id='detection" + i + "'>";
         table_description +=
             "<td>" + i + "</td>" +
             "<td>" + JSON.stringify(boxes[i][0]) + "</td>" +
