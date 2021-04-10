@@ -49,6 +49,8 @@ async def process_image(file: UploadFile = File(...)):
     return JSONResponse({
         "id": file.filename,
         "file_size": len(content),
+        "width": img.shape[1],
+        "height": img.shape[0],
         "detections": data
     })
 
