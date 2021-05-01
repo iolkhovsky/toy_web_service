@@ -1,5 +1,5 @@
 const imageCanvasAspectRatio = 16. / 9.;
-const imageCanvasShare = 0.75;
+const imageCanvasShare = 0.65;
 const imageCanvasWidth = window.innerWidth * imageCanvasShare;
 const imageCanvasHeight = imageCanvasWidth / imageCanvasAspectRatio;
 
@@ -27,7 +27,7 @@ function drawDetections(boxes, imgSize, transform) {
   var ctx = canvas.getContext('2d');
   var arrayLength = boxes.length;
   for (var i = 0; i < arrayLength; i++) {
-    var [boxX, boxY, boxW, boxH] = boxes[i];
+    var [boxX, boxY, boxW, boxH] = boxes[i]["bbox"];
     var xScale = w / imgWidth;
     var yScale = h / imgHeight;
     boxX = x + boxX * xScale;

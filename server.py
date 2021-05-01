@@ -41,11 +41,11 @@ async def process_image(file: UploadFile = File(...)):
     content = await file.read()
     img = decode_image(content)
     img, data = processor(img)
-
-    def preprocess_box(box):
-        return [int(x) for x in box]
-
-    data = [preprocess_box(x) for x in list(data)]
+    data = [{
+        "label": f"face#{idx}",
+        "score": 1.0,
+        "bbox": [int(x) for x in box],
+    } for idx, box in enumerate(data)]
     return JSONResponse({
         "id": file.filename,
         "file_size": len(content),
