@@ -2,13 +2,29 @@ var boxes;
 var canvas = document.getElementById("image-canvas");
 var output_console = document.getElementById("output")
 var det_table = document.getElementById("detections_table")
+var samples_list = document.getElementById("samples_list")
+
+function update_samples() {
+    var request = new XMLHttpRequest();
+    request.responseType = "json";
+    var url = "/samples";
+    request.open("GET", url, true);
+    request.onload = function () {
+        var samples_description = "<select size='10'>";
+        for (var i = 0; i < request.response.length; i++) {
+            samples_description += "<option value='" + JSON.stringify(i) + "'>" + JSON.stringify(request.response[i]) +  "</option>";
+        }
+        samples_description += "</select>";
+        samples_list.innerHTML = samples_description;
+    };
+    request.send();
+}
 
 function init() {
     canvas.width = imageCanvasWidth;
     canvas.height = imageCanvasHeight;
+    update_samples();
 }
-
-document.addEventListener('DOMContentLoaded', init);
 
 function failed() {
   window.alert("The provided file couldn't be loaded as an Image media");
@@ -35,9 +51,11 @@ function uploadedEventHandler(e) {
     output_console.textContent = JSON.stringify(boxes);
     drawDetections(boxes, [imgWidth, imgHeight], transform);
     show_detection_table(boxes)
+    update_samples()
   };
   request.send(formData);
   output_console.textContent = "Waiting for server's response...";
 }
 
+document.addEventListener('DOMContentLoaded', init);
 document.getElementById("uploaded-file").onchange = uploadedEventHandler;
