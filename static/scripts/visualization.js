@@ -4,7 +4,7 @@ const imageCanvasWidth = window.innerWidth * imageCanvasShare;
 const imageCanvasHeight = imageCanvasWidth / imageCanvasAspectRatio;
 
 
-function drawBox(context, box, color="#ff0000", lineWidth=1) {
+function drawDetection(context, box, label="", score=-1.0, color="#ff0000", lineWidth=1) {
   x1 = box[0]
   y1 = box[1]
   x2 = x1 + box[2]
@@ -19,6 +19,13 @@ function drawBox(context, box, color="#ff0000", lineWidth=1) {
   context.lineWidth = lineWidth;
   context.strokeStyle = color;
   context.stroke();
+
+  context.font = "12pt Cambria";
+  if (label.length) {
+    if (score >= 0.)
+        label += ": " + score.toString();
+    context.fillText(label, x1, y1-10);
+  }
 }
 
 function drawDetections(boxes, imgSize, transform) {
@@ -34,7 +41,7 @@ function drawDetections(boxes, imgSize, transform) {
     boxY = y + boxY * yScale;
     boxW = boxW * xScale;
     boxH = boxH * yScale;
-    drawBox(ctx, [boxX, boxY, boxW, boxH]);
+    drawDetection(ctx, [boxX, boxY, boxW, boxH], boxes[i]["label"], boxes[i]["score"]);
   }
 }
 
