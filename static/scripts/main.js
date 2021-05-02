@@ -10,12 +10,31 @@ function update_samples() {
     var url = "/samples";
     request.open("GET", url, true);
     request.onload = function () {
-        var samples_description = "<select size='10'>";
+        var samples_description = "<select id='select_sample' size='10'>";
         for (var i = 0; i < request.response.length; i++) {
-            samples_description += "<option value='" + JSON.stringify(i) + "'>" + JSON.stringify(request.response[i]) +  "</option>";
+            samples_description += "<option value=" + JSON.stringify(request.response[i]) + ">" + JSON.stringify(request.response[i]) +  "</option>";
         }
         samples_description += "</select>";
         samples_list.innerHTML = samples_description;
+
+        var samples_select = document.getElementById("select_sample");
+        if (samples_select != null) {
+            samples_select.onchange = function() {
+                var sample_id = samples_select.options[samples_select.selectedIndex].value;
+                var req_url = "/image?sample_id=" + sample_id;
+                var request = new XMLHttpRequest();
+                request.responseType = "blob";
+                request.open("GET", req_url, true);
+                request.onload = function () {
+                    var url = window.URL.createObjectURL(request.response);
+                    var img = new Image();
+                    img.onload = drawSourceImage;
+                    img.onerror = failed;
+                    img.src = url;
+                };
+                request.send();
+            };
+        };
     };
     request.send();
 }
