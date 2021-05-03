@@ -6,13 +6,19 @@ import io
 import uvicorn
 
 from backend.face_detector import FaceDetector
-from utils import decode_image, init_repo, save_sample, get_processed_samples_list, read_sample, encode_image
+from utils import *
 
 processor = FaceDetector()
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-init_repo()
+configs = read_yaml("server.yml")
+repo_root = configs["repo_root"] if "repo_root" in configs else "repo"
+repo_max_size = configs["repo_max_size"] if "repo_max_size" in configs else 3
+server_ip = configs["ip"] if "ip" in configs else "0.0.0.0"
+server_port = configs["port"] if "port" in configs else 8000
+
+repo = SamplesRepository(repo_root, repo_max_size)
 
 origins = [
     "http://localhost",
@@ -41,27 +47,27 @@ async def root(request: Request):
 
 @app.get("/samples", response_class=JSONResponse)
 async def root(request: Request):
-    return JSONResponse(get_processed_samples_list())
+    return JSONResponse(repo.get_processed_samples_list())
 
 
 @app.get("/image", response_class=JSONResponse)
 async def root(request: Request):
-    processed_imgs = get_processed_samples_list()
+    processed_imgs = repo.get_processed_samples_list()
     sample = processed_imgs[-1]
     if "sample_id" in request.query_params.keys():
         sample = request.query_params["sample_id"]
-    img, report = read_sample(sample)
+    img, report = repo.read_sample(sample)
     encoded = encode_image(img)
     return StreamingResponse(io.BytesIO(encoded.tobytes()), media_type="image/jpg")
 
 
 @app.get("/report", response_class=JSONResponse)
 async def root(request: Request):
-    processed_imgs = get_processed_samples_list()
+    processed_imgs = repo.get_processed_samples_list()
     sample = processed_imgs[-1]
     if "sample_id" in request.query_params.keys():
         sample = request.query_params["sample_id"]
-    img, report = read_sample(sample)
+    img, report = repo.read_sample(sample)
     return JSONResponse(report)
 
 
@@ -82,9 +88,9 @@ async def process_image(file: UploadFile = File(...)):
         "height": img.shape[0],
         "detections": data
     }
-    save_sample(file.filename, img, processing_result)
+    repo.save_sample(file.filename, img, processing_result)
     return JSONResponse(processing_result)
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host=configs["ip"], port=configs["port"])
