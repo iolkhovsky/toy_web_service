@@ -36,7 +36,7 @@ app.add_middleware(
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
-    return FileResponse("static/ui.html")
+    return FileResponse("static/index.html")
 
 
 @app.get("/samples", response_class=JSONResponse)

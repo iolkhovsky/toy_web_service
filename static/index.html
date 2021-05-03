@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Face detection service</title>
+    <link rel="stylesheet" type="text/css" href="static/styles/styles.css">
+    <link rel="shortcut icon" href="static/pic/favicon.ico">
+</head>
+<body>
+  <header>
+    <h2>Face detection service</h2>
+  </header>
+
+  <div id="container">
+    <section id="image">
+      <div>
+        <canvas id="image-canvas" class="image-container"> </canvas>
+      </div>
+    </section>
+
+    <section id="side_panel">
+      <div id="upload">
+        <label for="uploaded-file">Upload image</label>
+        <input name="file" type="file" accept=".jpg, .jpeg, .png" id="uploaded-file">
+      </div>
+      <div id="samples"></div>
+      <div id="detections"></div>
+      <div id="output"></div>
+    </section>
+    <footer>
+      <p>Toy demo</p>
+    </footer>
+  </div>
+
+  <script src="static/scripts/detections.js"></script>
+  <script src="static/scripts/samples.js"></script>
+  <script src="static/scripts/visualization.js"></script>
+  <script src="static/scripts/main.js"></script>
+</body>
+</html>
