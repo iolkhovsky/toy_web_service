@@ -14,6 +14,7 @@ function update_detections_list(boxes) {
         if (detections_select != null) {
             detections_select.onchange = function() {
                 highlight_idx = detections_select.selectedIndex;
+                redrawSourceImage();
                 drawDetections(boxes, [imgWidth, imgHeight], transform, highlight_idx);
             }
         }

@@ -66,3 +66,11 @@ function drawSourceImage() {
   var ctx = canvas.getContext('2d');
   ctx.drawImage(this, x, y, w, h);
 }
+
+function redrawSourceImage() {
+  canvas.width = imageCanvasWidth;
+  canvas.height = imageCanvasHeight;
+  var [x, y, w, h] = getImageCanvasTransform(current_image.width, current_image.height);
+  var ctx = canvas.getContext('2d');
+  ctx.drawImage(current_image, x, y, w, h);
+}

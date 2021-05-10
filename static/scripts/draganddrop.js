@@ -13,10 +13,10 @@ function handleFiles(files) {
 }
 
 function uploadFile(file) {
-  var img = new Image();
-  img.onload = drawSourceImage;
-  img.onerror = failed;
-  img.src = URL.createObjectURL(file);
+  current_image = new Image();
+  current_image.onload = drawSourceImage;
+  current_image.onerror = failed;
+  current_image.src = URL.createObjectURL(file);
 
   var formData = new FormData();
   var url = "/image";

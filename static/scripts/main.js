@@ -6,6 +6,7 @@ var detections_list = document.getElementById("detections")
 var samples_list = document.getElementById("samples")
 var imgWidth, imgHeight;
 var transform;
+var current_image;
 
 function init() {
     canvas.width = imageCanvasWidth;
@@ -18,10 +19,10 @@ function failed() {
 }
 
 function uploadedEventHandler(e) {
-  var img = new Image();
-  img.onload = drawSourceImage;
-  img.onerror = failed;
-  img.src = URL.createObjectURL(this.files[0]);
+  current_image = new Image();
+  current_image.onload = drawSourceImage;
+  current_image.onerror = failed;
+  current_image.src = URL.createObjectURL(this.files[0]);
 
   var formData = new FormData();
   formData.append("file", this.files[0]);

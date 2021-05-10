@@ -23,10 +23,10 @@ function update_samples_list() {
                 image_request.open("GET", img_req_url, true);
                 image_request.onload = function () {
                     var url = window.URL.createObjectURL(image_request.response);
-                    var img = new Image();
-                    img.onload = drawSourceImage;
-                    img.onerror = failed;
-                    img.src = url;
+                    current_image = new Image();
+                    current_image.onload = drawSourceImage;
+                    current_image.onerror = failed;
+                    current_image.src = url;
 
                     var rep_req_url = "/report?sample_id=" + sample_id;
                     var report_request = new XMLHttpRequest();
