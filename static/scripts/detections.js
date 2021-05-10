@@ -10,4 +10,11 @@ function update_detections_list(boxes) {
         }
         detections_description += "</select>";
         detections_list.innerHTML = detections_description;
+        var detections_select = document.getElementById("detections_select");
+        if (detections_select != null) {
+            detections_select.onchange = function() {
+                highlight_idx = detections_select.selectedIndex;
+                drawDetections(boxes, [imgWidth, imgHeight], transform, highlight_idx);
+            }
+        }
 }

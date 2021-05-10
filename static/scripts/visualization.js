@@ -28,7 +28,7 @@ function drawDetection(context, box, label="", score=-1.0, color="#ff0000", line
   }
 }
 
-function drawDetections(boxes, imgSize, transform) {
+function drawDetections(boxes, imgSize, transform, highlight_idx=-1) {
   var [imgWidth, imgHeight] = imgSize;
   var [x, y, w, h] = transform;
   var ctx = canvas.getContext('2d');
@@ -41,7 +41,10 @@ function drawDetections(boxes, imgSize, transform) {
     boxY = y + boxY * yScale;
     boxW = boxW * xScale;
     boxH = boxH * yScale;
-    drawDetection(ctx, [boxX, boxY, boxW, boxH], boxes[i]["label"], boxes[i]["score"]);
+    if (i == highlight_idx)
+        drawDetection(ctx, [boxX, boxY, boxW, boxH], boxes[i]["label"], boxes[i]["score"], color="#00ff00", lineWidth=4);
+    else
+        drawDetection(ctx, [boxX, boxY, boxW, boxH], boxes[i]["label"], boxes[i]["score"]);
   }
 }
 

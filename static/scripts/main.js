@@ -1,8 +1,11 @@
 var boxes;
+var highlight_idx = 0;
 var canvas = document.getElementById("image-canvas");
 var output_console = document.getElementById("output")
 var detections_list = document.getElementById("detections")
 var samples_list = document.getElementById("samples")
+var imgWidth, imgHeight;
+var transform;
 
 function init() {
     canvas.width = imageCanvasWidth;
@@ -29,13 +32,13 @@ function uploadedEventHandler(e) {
   request.open("POST", url, true);
   request.onload = function () {
     boxes = request.response["detections"];
-    var imgWidth = request.response["width"];
-    var imgHeight = request.response["height"];
-    var transform = getImageCanvasTransform(imgWidth, imgHeight);
+    imgWidth = request.response["width"];
+    imgHeight = request.response["height"];
+    transform = getImageCanvasTransform(imgWidth, imgHeight);
     output_console.textContent = JSON.stringify(boxes);
-    drawDetections(boxes, [imgWidth, imgHeight], transform);
     update_detections_list(boxes);
     update_samples_list();
+    drawDetections(boxes, [imgWidth, imgHeight], transform, highlight_idx);
   };
   request.send(formData);
   output_console.textContent = "Waiting for server's response...";

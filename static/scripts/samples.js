@@ -34,12 +34,12 @@ function update_samples_list() {
                     report_request.open("GET", rep_req_url, true);
                     report_request.onload = function () {
                         boxes = report_request.response["detections"];
-                        var imgWidth = report_request.response["width"];
-                        var imgHeight = report_request.response["height"];
-                        var transform = getImageCanvasTransform(imgWidth, imgHeight);
+                        imgWidth = report_request.response["width"];
+                        imgHeight = report_request.response["height"];
+                        transform = getImageCanvasTransform(imgWidth, imgHeight);
                         output_console.textContent = JSON.stringify(boxes);
-                        drawDetections(boxes, [imgWidth, imgHeight], transform);
                         update_detections_list(boxes);
+                        drawDetections(boxes, [imgWidth, imgHeight], transform, highlight_idx);
                     };
                     report_request.send();
                 };
