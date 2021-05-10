@@ -16,6 +16,7 @@ function update_detections_list(boxes) {
                 highlight_idx = detections_select.selectedIndex;
                 redrawSourceImage();
                 drawDetections(boxes, [imgWidth, imgHeight], transform, highlight_idx);
+                redrawSubframe();
             }
         }
 }

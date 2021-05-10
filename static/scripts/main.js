@@ -7,6 +7,7 @@ var samples_list = document.getElementById("samples")
 var imgWidth, imgHeight;
 var transform;
 var current_image;
+var current_subframe;
 
 function init() {
     canvas.width = imageCanvasWidth;

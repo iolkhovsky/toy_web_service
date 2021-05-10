@@ -74,3 +74,16 @@ function redrawSourceImage() {
   var ctx = canvas.getContext('2d');
   ctx.drawImage(current_image, x, y, w, h);
 }
+
+function redrawSubframe() {
+  var subframeCanvas = document.getElementById("subframe-canvas");
+  if (subframeCanvas == null)
+    return;
+  if (current_image == null)
+    return;
+  subframeCanvas.width = window.innerWidth * 0.25;
+  subframeCanvas.height = window.innerWidth * 0.25;
+  var [x, y, w, h] = boxes[highlight_idx]["bbox"];
+  var ctx = subframeCanvas.getContext('2d');
+  ctx.drawImage(current_image, x, y, w, h, 0, 0, subframeCanvas.width, subframeCanvas.height);
+}
